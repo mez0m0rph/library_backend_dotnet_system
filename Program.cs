@@ -8,4 +8,5 @@ builder.Services.AddScoped<IBookService, BookService>();
 
 builder.Services.AddControllers();
 
+app.MapControllers();
 app.Run();

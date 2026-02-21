@@ -21,13 +21,19 @@ namespace project
         public async Task<ActionResult<BookDto>> GetById(int id)
         {
             var book = await _bookService.GetBookByIdAsync(id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
             return Ok(book);
         }
 
         [HttpPost]
-        public async Task Create<ActionResult> (CreateBookDto dto)
+        public async Task<ActionResult> Create(CreateBookDto dto)
         {
-            _bookService.CreateBookAsync(dto);
+            await _bookService.CreateBookAsync(dto);
             return NoContent();
         }
     }
