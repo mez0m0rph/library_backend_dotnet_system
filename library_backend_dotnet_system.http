@@ -1,0 +1,6 @@
+@library_backend_dotnet_system_HostAddress = http://localhost:5093
+
+GET {{library_backend_dotnet_system_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
