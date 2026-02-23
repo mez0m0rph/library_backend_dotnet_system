@@ -6,6 +6,8 @@ namespace project
 
         Task<BookDto?> GetBookByIdAsync(int id);
 
+        Task UpdateAsync (int id, CreateBookDto dto);
+
         Task CreateBookAsync(CreateBookDto dto);
     }
 }

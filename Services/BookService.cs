@@ -59,6 +59,19 @@ namespace project
             return null;
         }
 
+        public async Task UpdateBookAsync(int id, CreateBookDto dto)
+        {
+            var book = await _bookRepository.GetByIdAsync(id);
+
+            if (book != null)
+            {
+                book.Title = dto.Title;
+                book.Author = dto.Author;
+
+                await _bookRepository.SaveChangesAsync();
+            }
+        }
+
         public async Task CreateBookAsync(CreateBookDto dto)
         {
             var bookEntity = new Book
