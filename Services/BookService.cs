@@ -2,6 +2,7 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using Microsoft.VisualBasic;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace project
 {
@@ -13,24 +14,33 @@ namespace project
             _bookRepository = bookRepository;
         }
 
-        public async Task<IEnumerable<BookDto>> GetBooksAsync(int pageNumber, int pageSize)
+        public async Task<IEnumerable<BookDto>> GetBooksAsync(int pageNumber, int pageSize, string? searchTerm)
         {
-            var query = _bookRepository.GetAllQuery();
+            IQueryable<Book> query = _bookRepository.GetAllQuery();
 
-            query = query.OrderBy(b => b.Id); // сорт для правильности
+            if (!string.IsNullOrWhiteSpace(searchTerm))  // фильтр
+            {
+                var searchLower = searchTerm.ToLower();
+
+                query = query.Where(b => 
+                b.Title.ToLower().Contains(searchLower) ||
+                b.Author.ToLower().Contains(searchLower));
+            }
 
             var pagedQuery = query
+                .OrderBy(b => b.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize);
 
-            return await pagedQuery (b => new BookDto
-            {
-                Id = b.Id,
-                Title = b.Title,
-                Author = b.Author,
-                IsAvailable = b.IsAvailable
-            })
-            .ToListAsync();
+            return await pagedQuery
+                .Select(b => new BookDto
+                {
+                    Id = b.Id,
+                    Author = b.Author,
+                    Title = b.Title,
+                    IsAvailable = b.IsAvailable
+                })
+                .ToListAsync();
         }
 
         public async Task<BookDto?> GetBookByIdAsync(int id)
