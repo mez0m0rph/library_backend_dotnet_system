@@ -2,7 +2,7 @@ namespace project
 {
     public interface IBookService
     {
-        Task<IEnumerable<BookDto>> GetBooksAsync();
+        Task<IEnumerable<BookDto>> GetBooksAsync(int pageNumber, int pageSize);
 
         Task<BookDto?> GetBookByIdAsync(int id);
 

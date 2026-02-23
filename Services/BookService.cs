@@ -13,19 +13,24 @@ namespace project
             _bookRepository = bookRepository;
         }
 
-        public async Task<IEnumerable<BookDto>> GetBooksAsync()
+        public async Task<IEnumerable<BookDto>> GetBooksAsync(int pageNumber, int pageSize)
         {
             var query = _bookRepository.GetAllQuery();
 
-            var dtoQuery = query.Select(b => new BookDto
+            query = query.OrderBy(b => b.Id); // сорт для правильности
+
+            var pagedQuery = query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize);
+
+            return await pagedQuery (b => new BookDto
             {
                 Id = b.Id,
                 Title = b.Title,
                 Author = b.Author,
                 IsAvailable = b.IsAvailable
-            });
-
-            return await dtoQuery.ToListAsync();
+            })
+            .ToListAsync();
         }
 
         public async Task<BookDto?> GetBookByIdAsync(int id)
