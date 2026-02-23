@@ -11,9 +11,11 @@ namespace project
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<BookDto>>> GetAll([FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10, 
+            [FromQuery] string? searchTerm = null)
         {
-            var books = await _bookService.GetBooksAsync();
+            var books = await _bookService.GetBooksAsync(pageNumber, pageSize, searchTerm);
             return Ok(books);
         }
 
