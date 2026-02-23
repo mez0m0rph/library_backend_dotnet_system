@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Runtime.CompilerServices;
 using Microsoft.VisualBasic;
+using Microsoft.EntityFrameworkCore;
 
 namespace project
 {
@@ -14,14 +15,17 @@ namespace project
 
         public async Task<IEnumerable<BookDto>> GetBooksAsync()
         {
-            var books = await _bookRepository.GetAllAsync();
-            return books.Select(b => new BookDto
+            var query = _bookRepository.GetAllQuery();
+
+            var dtoQuery = query.Select(b => new BookDto
             {
                 Id = b.Id,
                 Title = b.Title,
-                Author = b.Author, 
+                Author = b.Author,
                 IsAvailable = b.IsAvailable
             });
+
+            return await dtoQuery.ToListAsync();
         }
 
         public async Task<BookDto?> GetBookByIdAsync(int id)

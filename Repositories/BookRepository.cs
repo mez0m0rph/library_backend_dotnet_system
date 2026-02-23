@@ -12,10 +12,9 @@ namespace project
             _appDbContext = appDbContext;
         }
 
-        public async Task<IEnumerable<Book>> GetAllAsync()
+        public IQueryable<Book> GetAllQuery()
         {
-            var result = await _appDbContext.Books.ToListAsync();
-            return result;
+            return _appDbContext.Books.AsNoTracking();
         }
 
         public async Task<Book> GetByIdAsync(int id)

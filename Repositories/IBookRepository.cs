@@ -4,7 +4,7 @@ namespace project
 {
     public interface IBookRepository
     {
-        Task<IEnumerable<Book>> GetAllAsync();
+        IQueryable<Book> GetAllQuery();
 
         Task<Book?> GetByIdAsync(int id);
 
