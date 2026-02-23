@@ -12,7 +12,7 @@ namespace project
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookDto>>> GetAll([FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 10, 
+            [FromQuery] int pageSize = 10, // если в запросе (в URL после "?" не будет ничего стоять, то выберутся значения по дефолту (мы их объявили)) 
             [FromQuery] string? searchTerm = null)
         {
             var books = await _bookService.GetBooksAsync(pageNumber, pageSize, searchTerm);
